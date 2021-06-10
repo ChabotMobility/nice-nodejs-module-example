@@ -62,15 +62,15 @@ const parse = (decodePlainText: string) => {
   }
   const decodedPlainTexts: { [key: string]: string } = {};
   for (let idx = 0; idx < _decodedPlainTexts.length / 2; idx += 1) {
-    decodedPlainTexts[_decodedPlainTexts[2 * idx]] =
+    decodedPlainTexts[_decodedPlainTexts[2 * idx].toLowerCase()] =
       _decodedPlainTexts[2 * idx + 1];
   }
   // const name = Buffer.from(decodedPlainTexts["NAME"]);
   // const utf8Name = decodedPlainTexts["UTF8_NAME"];
 
-  if (decodedPlainTexts["UTF8_NAME"]) {
-    decodedPlainTexts["UTF8_NAME"] = decodeURIComponent(
-      decodedPlainTexts["UTF8_NAME"]
+  if (decodedPlainTexts["utf8_name"]) {
+    decodedPlainTexts["utf8_name"] = decodeURIComponent(
+      decodedPlainTexts["utf8_name"]
     );
   }
 
@@ -101,7 +101,7 @@ export const initSession = async (opt: InitialOptions) => {
     );
     return stdout;
   } catch (err) {
-    console.log(err.cmd);
+    // console.log(err.cmd);
     // 바이너리 모듈의 정상 종료 코드가 1이다  - 난감
     if (err.code === 1) {
       switch (err.stdout) {
@@ -132,7 +132,7 @@ export const decode = async (encodedText: string) => {
     );
     return stdout;
   } catch (err) {
-    console.log("err.cmd", err.cmd);
+    // console.log("err.cmd", err.cmd);
     if (err.code === 1) {
       switch (err.stdout) {
         case "-1":
