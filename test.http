@@ -1,0 +1,12 @@
+###
+GET http://localhost:8880/api/nice-auth?success-url=https%3A%2F%2Fgoogle.com&fail-url=https%3A%2F%2Fgoogle.com HTTP/1.1 
+
+###
+GET http://localhost:8880/api/nice-auth/session?success-url=https%3A%2F%2Fgoogle.com&fail-url=https%3A%2F%2Fgoogle.com HTTP/1.1 
+
+  
+### form ftt
+POST http://localhost:8880/api/nice-auth/user-info HTTP/1.1 
+Content-Type: application/x-www-form-urlencoded
+
+EncodeData=AgAFQlQ1NTSv9VQ+hvsPNUwBs1wIi0kKNmgF8D36tQdc2SvWuIYKnVz0JyGQ2G8sfu4w8+MBMEf+dRCQmePcNrn5WiCsMm5MQJo/FN0XptF+RZLDDbKYssSwscyaTrfv4oiMSiJa61BWLRXsT1ySkALO2JSb4ftvvE9zsPi5S2HDFwWnmSQHbHYptByLYAl8j+7l1kRaN0b3zBgmEZiksRcRO2fIbx6hNnK/fA/Ja+tPfr8FALMwoME9PPG8RWymFIgnj/2uY5szbp5+pLB0hr1+F0/9et7m3qgVjDQEFWEVdu7FK/ZbrKFbGbvmV3R1mTCbFJIw5lojzUX4U/cdZotA3BLXi4euXMXmXk2TaGAqKPLoOURrMDttlZ0ZDPgU8Qc2VckUq3CZzoXuLXWXdDcQwj2c+dU9rc0fRuh9JR7190tLOS/5PKpoVHfGA/JAdmVlq9w+2KJ9X2kf+3kxaEif/opXPJo5leY+iSFwPUk53M6fP9auursW7RX1fXxowZd6GGXVzFKdGbn72+61ihcpjtoxaXKY55SXbRb+uiO9vfjC6al9FebPpCF9c5ivPeZAJ2I+bx0ocQw+wr1ish7kQ1RqJNZAwk8Y+q0W5e22cvldbrCW+W4JP/SFFztkM1QJzxiMeRQsjj3V4njJJDk6M5Xm6gm3JIoD6/K0kxpVHWrPxNpoxD/odoyL/zr+y9c1awojdHaariz1UMHp8hMliY794Gje

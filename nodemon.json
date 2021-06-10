@@ -1,0 +1,9 @@
+{
+  "verbose": true,
+  "watch": [
+    "dist"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
