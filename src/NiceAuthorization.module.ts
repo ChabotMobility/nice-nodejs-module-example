@@ -138,7 +138,7 @@ export const decode = async (encodedText: string) => {
       ["DEC", SITE_CODE, SITE_PASSWORD, encodedText],
       { encoding: "binary" }
     );
-    return parse(stdout));
+    return parse(stdout);
   } catch (err) {
     if (err.code === 1) {
       switch (err.stdout) {

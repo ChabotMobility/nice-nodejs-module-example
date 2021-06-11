@@ -6,6 +6,8 @@ import {
   decode,
 } from "./NiceAuthorization.module";
 
+const PORT: number = process.env.PORT;
+
 const requestHandler: http.RequestListener = async (
   req: http.IncomingMessage,
   res: http.ServerResponse
@@ -72,7 +74,7 @@ const requestHandler: http.RequestListener = async (
 
 async function main() {
   const app = http.createServer(requestHandler);
-  app.listen(8880);
+  app.listen(PORT | 8888);
 }
 
 main().catch(console.error);
