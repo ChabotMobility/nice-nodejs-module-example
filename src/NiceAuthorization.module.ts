@@ -6,10 +6,13 @@ import iconv from "iconv-lite";
 
 const execFileAsync = promisify(execFile);
 
+type Platform = "Mac" | "Linux" | "Linux_x64" | "Window";
+
 // NICE평가정보에서 발급한 본인인증 서비스 개발 정보(사이트 코드 , 사이트 패스워드)
 const SITE_CODE = process.env.SITE_CODE || "";
 const SITE_PASSWORD = process.env.SITE_PASSWORD || "";
-const PLATFORM: "Mac" | "Linux" | "Linux_x64" | "Window" = "Mac";
+const PLATFORM: Platform =
+  (process.env.NICE_SERVER_PLATFORM as Platform) || "Linux";
 const CPClientPath = path.join(process.cwd(), "bin", PLATFORM, "CPClient");
 
 export type InitialOptions = {
