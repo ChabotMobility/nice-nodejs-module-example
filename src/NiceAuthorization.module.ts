@@ -2,6 +2,7 @@ import { execFile, execFileSync } from "child_process";
 import { promisify } from "util";
 import path from "path";
 import scuid from "scuid";
+import iconv from "iconv-lite";
 
 const execFileAsync = promisify(execFile);
 
@@ -25,6 +26,10 @@ export type InitialOptions = {
   // 실패시 이동될 URL (방식 : 프로토콜을 포함한 절대 주소)
   failUrl: string;
 };
+
+function eucKrTransformer(plainBinaryText: string) {
+  return iconv.decode(Buffer.from(plainBinaryText, "binary"), "euc-kr");
+}
 
 function flatten(obj: object) {
   let itemsFlatten = "";
@@ -65,13 +70,16 @@ const parse = (decodePlainText: string) => {
     decodedPlainTexts[_decodedPlainTexts[2 * idx].toLowerCase()] =
       _decodedPlainTexts[2 * idx + 1];
   }
-  // const name = Buffer.from(decodedPlainTexts["NAME"]);
-  // const utf8Name = decodedPlainTexts["UTF8_NAME"];
 
-  if (decodedPlainTexts["utf8_name"]) {
-    decodedPlainTexts["utf8_name"] = decodeURIComponent(
-      decodedPlainTexts["utf8_name"]
-    );
+  const eucKrName = decodedPlainTexts["name"];
+  if (eucKrName) {
+    const nameBin = Buffer.from(decodedPlainTexts["name"], "binary");
+    decodedPlainTexts["name"] = iconv.decode(nameBin, "euc-kr");
+  }
+
+  const utf8Name = decodedPlainTexts["utf8_name"];
+  if (utf8Name) {
+    decodedPlainTexts["utf8_name"] = decodeURIComponent(utf8Name);
   }
 
   return decodedPlainTexts;
@@ -128,11 +136,10 @@ export const decode = async (encodedText: string) => {
     const { stdout } = await execFileAsync(
       CPClientPath,
       ["DEC", SITE_CODE, SITE_PASSWORD, encodedText],
-      { encoding: "utf8" }
+      { encoding: "binary" }
     );
-    return stdout;
+    return parse(stdout));
   } catch (err) {
-    // console.log("err.cmd", err.cmd);
     if (err.code === 1) {
       switch (err.stdout) {
         case "-1":
