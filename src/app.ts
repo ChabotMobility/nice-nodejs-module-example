@@ -1,9 +1,11 @@
 import http from "http";
 import { URL } from "url";
+import qs from "qs";
 import {
   initSession,
   InitialOptions,
   decode,
+  initialHtmlServing,
 } from "./NiceAuthorization.module";
 
 const PORT = process.env.PORT || 8888;
@@ -16,6 +18,29 @@ const requestHandler: http.RequestListener = async (
   const _url = new URL(<string>url, process.env.NICE_SERVER_HOSTNAME);
 
   switch (`${method?.toUpperCase()} ${_url.pathname}`) {
+    case "GET /nice": {
+      const successUrl =
+        _url.searchParams.get("success-url") ||
+        <string>process.env.NICE_SERVER_HOSTNAME;
+      const failUrl =
+        _url.searchParams.get("fail-url") ||
+        <string>process.env.NICE_SERVER_HOSTNAME;
+      const popGubun = _url.searchParams.has("popup") ? "Y" : "N";
+      const customize = _url.searchParams.has("mobile") ? "Mobile" : undefined;
+      const opt: InitialOptions = {
+        successUrl,
+        failUrl,
+        popGubun,
+        customize,
+      };
+
+      const html = await initialHtmlServing(res, opt);
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.write(html);
+      res.end();
+      break;
+    }
+
     case "GET /api/nice-auth/session": {
       const opt: InitialOptions = {
         successUrl:
@@ -37,6 +62,26 @@ const requestHandler: http.RequestListener = async (
       break;
     }
 
+    case "GET /api/nice-auth/user-info": {
+      const encodeData = _url.searchParams.get("EncodeData");
+
+      if (encodeData === null || /^0-9a-zA-Z+\/=/.test(encodeData!)) {
+        res.writeHead(400);
+        res.end("입력값 오류");
+        return;
+      }
+      decode(encodeData)
+        .then((parsed) => {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify(parsed, null, 2));
+        })
+        .catch((err) => {
+          console.log(err);
+          res.writeHead(400);
+          res.end("복호화 실패");
+        });
+      break;
+    }
     case "POST /api/nice-auth/user-info": {
       let body = "";
       req.on("data", (chunk) => {
@@ -49,14 +94,15 @@ const requestHandler: http.RequestListener = async (
           return;
         }
 
-        const [_, encodeData] = body.split("=");
+        const { EncodeData: encodeData }: { EncodeData?: string } =
+          qs.parse(body);
+        if (!encodeData || /^0-9a-zA-Z+\/=/.test(encodeData)) {
+          res.writeHead(400);
+          res.end("입력값 오류");
+          return;
+        }
         decode(encodeData)
           .then((parsed) => {
-            if (body === null || /^0-9a-zA-Z+\/=/.test(encodeData)) {
-              res.writeHead(400);
-              res.end("입력값 오류");
-              return;
-            }
             res.writeHead(200);
             res.end(JSON.stringify(parsed, null, 2));
           })

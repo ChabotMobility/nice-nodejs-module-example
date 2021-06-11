@@ -2,6 +2,7 @@ import { execFile, execFileSync } from "child_process";
 import { promisify } from "util";
 import path from "path";
 import scuid from "scuid";
+import http from "http";
 import iconv from "iconv-lite";
 
 const execFileAsync = promisify(execFile);
@@ -32,6 +33,27 @@ export type InitialOptions = {
 
 function eucKrTransformer(plainBinaryText: string) {
   return iconv.decode(Buffer.from(plainBinaryText, "binary"), "euc-kr");
+}
+
+export async function initialHtmlServing(
+  res: http.ServerResponse,
+  opt: InitialOptions
+) {
+  const encodedSessionData = await initSession(opt);
+
+  return [
+    "<!DOCTYPE html>",
+    "<html>",
+    "<head>",
+    "</head>",
+    "<body>",
+    '<form name="nice_auth" method="POST" action="https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb">',
+    '<input type="hidden" name="m" value="checkplusService">',
+    `<input type="hidden" name="EncodeData" value="${encodedSessionData}">`,
+    "</form>",
+    "<script>document.nice_auth.submit();</script>",
+    "</body>",
+  ].join("\n");
 }
 
 function flatten(obj: object) {
@@ -103,8 +125,8 @@ export const initSession = async (opt: InitialOptions) => {
           AUTH_TYPE: "",
           RTN_URL: opt.successUrl,
           ERR_URL: opt.failUrl,
-          POPUP_GUBUN: "N",
-          CUSTOMIZE: "Mobile",
+          POPUP_GUBUN: opt.popGubun || "N",
+          CUSTOMIZE: opt.customize || "",
           GENDER: "",
         }),
       ],
@@ -152,6 +174,7 @@ export const decode = async (encodedText: string) => {
         case "-5":
           throw new Error("HASH값 불일치 - 복호화 데이터는 리턴됨");
         case "-6":
+          console.error(err);
           throw new Error("복호화 데이터 오류");
         case "-9":
           throw new Error("입력값 오류");

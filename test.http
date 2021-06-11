@@ -1,4 +1,5 @@
-@hostname=chabotprime-api.chabot.kr:8888
+@hostname=localhost:8888
+# @hostname=chabotprime-api.chabot.kr:8888
 
 ###
 GET http://{{hostname}}/api/nice-auth?success-url=https%3A%2F%2Fgoogle.com&fail-url=https%3A%2F%2Fgoogle.com HTTP/1.1 
@@ -6,9 +7,16 @@ GET http://{{hostname}}/api/nice-auth?success-url=https%3A%2F%2Fgoogle.com&fail-
 ###
 GET http://{{hostname}}/api/nice-auth/session?success-url=https%3A%2F%2Fgoogle.com&fail-url=https%3A%2F%2Fgoogle.com HTTP/1.1 
 
-  
+###
+GET http://{{hostname}}/api/nice-auth/user-info?EncodeData=AgAFQlQ1NTRjMz61zHh7vhjITgVs0JMKYFappIWE%2BqC11t4Tdh9IwFz0JyGQ2G8sfu4w8%2BMBMEf%2BdRCQmePcNrn5WiCsMm5MQWvyHPpx2C53kvWcGGoucA07MtCDtK8VaXQAG%2BOf7x/GH02VVSe2sYA2IwO4A53DN4MXbGsQqhRlT0M/kvjD1J9EjdlDDUAR3sVRFVynxvH1ZARORhNQSiUPdP/9%2BDIRZDsTmRzZtgp5FBIcTULixGwI9o1mlu8z5jjGT3DYapIh7VDrynVzwNyaJeW477g6AlfofBGEMfoJ2zypfkumGSzvvU%2B5AE9FISZjQArwwIYtgzahdcy4RxPS/gZLTzgkiolz1VmUJIZs9a4D%2BqZJNEqYUfXF%2B740ymEBRABXXv2eGrNOMq1LYN3hxtMI8bmHPoEJEz0fjpUGFlfVB8C%2BUoO3zt3Ti2HFWRh/cj%2B03i8qOpXezd9etOj05gkR1k38EBKh8HIEbwsdKVsH/Uc2xMQhB9tGRCCa3TJRX7QV8qCKe6/8dI92qd0Mwo5ue1woGeVQ%2BPUDpw9AbepcPPlAPwxCtZJEG9puuNE1b1FxaqBM5qgpoAeAOdK%2BRZwz8TTJBDLR%2B%2BB%2BNBJS61mfhb%2BRWrrHFLRYewRXzQhhL%2B4u2g369mdSgrKzI30d6/65%2BQZAktEqU/VrdoK2FIVe1FjgzYXr9ICE0ni5iWvQqpR/VhfwDSnOzIL6gGru4d6Nr/T%2B HTTP/1.1
+
+
+
 ### form ftt
 POST http://{{hostname}}/api/nice-auth/user-info HTTP/1.1 
 Content-Type: application/x-www-form-urlencoded
 
 EncodeData=AgAFQlQ1NTSv9VQ+hvsPNUwBs1wIi0kKNmgF8D36tQdc2SvWuIYKnVz0JyGQ2G8sfu4w8+MBMEf+dRCQmePcNrn5WiCsMm5MQJo/FN0XptF+RZLDDbKYssSwscyaTrfv4oiMSiJa61BWLRXsT1ySkALO2JSb4ftvvE9zsPi5S2HDFwWnmSQHbHYptByLYAl8j+7l1kRaN0b3zBgmEZiksRcRO2fIbx6hNnK/fA/Ja+tPfr8FALMwoME9PPG8RWymFIgnj/2uY5szbp5+pLB0hr1+F0/9et7m3qgVjDQEFWEVdu7FK/ZbrKFbGbvmV3R1mTCbFJIw5lojzUX4U/cdZotA3BLXi4euXMXmXk2TaGAqKPLoOURrMDttlZ0ZDPgU8Qc2VckUq3CZzoXuLXWXdDcQwj2c+dU9rc0fRuh9JR7190tLOS/5PKpoVHfGA/JAdmVlq9w+2KJ9X2kf+3kxaEif/opXPJo5leY+iSFwPUk53M6fP9auursW7RX1fXxowZd6GGXVzFKdGbn72+61ihcpjtoxaXKY55SXbRb+uiO9vfjC6al9FebPpCF9c5ivPeZAJ2I+bx0ocQw+wr1ish7kQ1RqJNZAwk8Y+q0W5e22cvldbrCW+W4JP/SFFztkM1QJzxiMeRQsjj3V4njJJDk6M5Xm6gm3JIoD6/K0kxpVHWrPxNpoxD/odoyL/zr+y9c1awojdHaariz1UMHp8hMliY794Gje
+
+###
+GET http://{{hostname}}/nice?popup=&mobile= HTTP/1.1
