@@ -13,15 +13,17 @@ const requestHandler: http.RequestListener = async (
   res: http.ServerResponse
 ) => {
   const { method, url } = req;
-  const _url = new URL(<string>url, process.env.HOSTNAME);
+  const _url = new URL(<string>url, process.env.NICE_SERVER_HOSTNAME);
 
   switch (`${method?.toUpperCase()} ${_url.pathname}`) {
     case "GET /api/nice-auth/session": {
       const opt: InitialOptions = {
         successUrl:
-          _url.searchParams.get("success-url") || <string>process.env.HOSTNAME,
+          _url.searchParams.get("success-url") ||
+          <string>process.env.NICE_SERVER_HOSTNAME,
         failUrl:
-          _url.searchParams.get("fail-url") || <string>process.env.HOSTNAME,
+          _url.searchParams.get("fail-url") ||
+          <string>process.env.NICE_SERVER_HOSTNAME,
         popGubun: "N",
         customize: "Mobile",
       };
