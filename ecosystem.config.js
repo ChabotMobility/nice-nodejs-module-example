@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       app: "NiceAuthorizationService",
-      script: "dist/app.js",
+      script: "node -r dotenv/config dist/app.js",
       watch: false,
     },
   ],
