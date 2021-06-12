@@ -53,6 +53,7 @@ export async function initialHtmlServing(
     "</form>",
     "<script>document.nice_auth.submit();</script>",
     "</body>",
+    "</html>",
   ].join("\n");
 }
 
