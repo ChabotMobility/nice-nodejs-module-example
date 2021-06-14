@@ -43,8 +43,9 @@ export async function initialHtmlServing(
 
   return [
     "<!DOCTYPE html>",
-    "<html>",
+    '<html lang="ko">',
     "<head>",
+    '<meta charset="utf-8">',
     "</head>",
     "<body>",
     '<form name="nice_auth" method="POST" action="https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb">',
