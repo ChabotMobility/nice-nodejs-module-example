@@ -103,7 +103,9 @@ const requestHandler: http.RequestListener = async (
         }
         decode(encodeData)
           .then((parsed) => {
-            res.writeHead(200);
+            res.writeHead(200, {
+              "Content-type": "application/json; charset=utf-8",
+            });
             res.end(JSON.stringify(parsed, null, 2));
           })
           .catch((err) => {
