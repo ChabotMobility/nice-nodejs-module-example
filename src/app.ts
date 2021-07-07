@@ -35,7 +35,9 @@ const requestHandler: http.RequestListener = async (
       };
 
       const html = await initialHtmlServing(res, opt);
-      res.writeHead(200, { "Content-Type": "text/html" });
+      res.writeHead(200, {
+        "Content-type": "text/html; charset=utf-8",
+      });
       res.write(html);
       res.end();
       break;
@@ -53,10 +55,14 @@ const requestHandler: http.RequestListener = async (
         customize: "Mobile",
       };
       if (Object.values(opt).some((optValue) => !optValue)) {
-        res.writeHead(500).end();
+        res
+          .writeHead(500, {
+            "Content-type": "text/plain; charset=utf-8",
+          })
+          .end();
         return;
       }
-      res.writeHead(200, { "Content-Type": "text/plain" });
+      res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
       res.write((await initSession(opt)) || "Empty");
       res.end();
       break;
@@ -72,12 +78,16 @@ const requestHandler: http.RequestListener = async (
       }
       decode(encodeData)
         .then((parsed) => {
-          res.writeHead(200, { "Content-Type": "application/json" });
+          res.writeHead(200, {
+            "Content-type": "application/json; charset=utf-8",
+          });
           res.end(JSON.stringify(parsed, null, 2));
         })
         .catch((err) => {
           console.log(err);
-          res.writeHead(400);
+          res.writeHead(400, {
+            "Content-type": "text/plain; charset=utf-8",
+          });
           res.end("복호화 실패");
         });
       break;
@@ -89,7 +99,9 @@ const requestHandler: http.RequestListener = async (
       });
       req.on("end", () => {
         if (!req.complete) {
-          res.writeHead(500);
+          res.writeHead(500, {
+            "Content-type": "text/plain; charset=utf-8",
+          });
           res.end();
           return;
         }
@@ -97,7 +109,9 @@ const requestHandler: http.RequestListener = async (
         const { EncodeData: encodeData }: { EncodeData?: string } =
           qs.parse(body);
         if (!encodeData || /^0-9a-zA-Z+\/=/.test(encodeData)) {
-          res.writeHead(400);
+          res.writeHead(400, {
+            "Content-type": "text/plain; charset=utf-8",
+          });
           res.end("입력값 오류");
           return;
         }
@@ -110,14 +124,89 @@ const requestHandler: http.RequestListener = async (
           })
           .catch((err) => {
             console.log(err);
-            res.writeHead(400);
+            res.writeHead(400, {
+              "Content-type": "text/plain; charset=utf-8",
+            });
             res.end("복호화 실패");
           });
       });
       break;
     }
+    case "GET /user": {
+      const encodeData = _url.searchParams.get("EncodeData");
+
+      if (encodeData === null || /^0-9a-zA-Z+\/=/.test(encodeData!)) {
+        res.writeHead(400, {
+          "Content-type": "text/plain; charset=utf-8",
+        });
+        res.end("입력값 오류");
+        return;
+      }
+      const html = [
+        "<!DOCTYPE html>",
+        '<html lang="ko">',
+        "<head>",
+        '<meta charset="utf-8">',
+        "</head>",
+        "<body>",
+        `<input type="hidden" name="EncodeData" value="${encodeData}">`,
+        "</form>",
+        "</body>",
+        "</html>",
+      ].join("\n");
+      res.writeHead(200, {
+        "Content-type": "text/html; charset=utf-8",
+      });
+      res.end(html);
+
+      break;
+    }
+    case "POST /user": {
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk;
+      });
+      req.on("end", () => {
+        if (!req.complete) {
+          res.writeHead(500, {
+            "Content-type": "text/plain; charset=utf-8",
+          });
+          res.end();
+          return;
+        }
+
+        const { EncodeData: encodeData }: { EncodeData?: string } =
+          qs.parse(body);
+        if (!encodeData || /^0-9a-zA-Z+\/=/.test(encodeData)) {
+          res.writeHead(400, {
+            "Content-type": "text/plain; charset=utf-8",
+          });
+          res.end("입력값 오류");
+          return;
+        }
+        const html = [
+          "<!DOCTYPE html>",
+          '<html lang="ko">',
+          "<head>",
+          '<meta charset="utf-8">',
+          "</head>",
+          "<body>",
+          `<input type="hidden" name="EncodeData" value="${encodeData}">`,
+          "</form>",
+          "</body>",
+          "</html>",
+        ].join("\n");
+        res.writeHead(200, {
+          "Content-type": "text/html; charset=utf-8",
+        });
+        res.end(html);
+      });
+      break;
+    }
     default:
-      res.writeHead(405);
+      res.writeHead(405, {
+        "Content-type": "text/plain; charset=utf-8",
+      });
       res.end();
   }
 };
