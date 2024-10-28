@@ -17,6 +17,14 @@ const requestHandler: http.RequestListener = async (
   const { method, url } = req;
   const _url = new URL(<string>url, process.env.NICE_SERVER_HOSTNAME);
 
+  const CORSHeader = {
+  'Access-Control-Allow-Origin': 'https://buy-car.chabot.co.kr',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Accept',
+  'Access-Control-Max-Age': 0,
+  'Content-type': 'text/html; charset=utf-8',
+  };
+
   switch (`${method?.toUpperCase()} ${_url.pathname}`) {
     case "GET /nice": {
       const successUrl =
@@ -35,9 +43,7 @@ const requestHandler: http.RequestListener = async (
       };
 
       const html = await initialHtmlServing(res, opt);
-      res.writeHead(200, {
-        "Content-type": "text/html; charset=utf-8",
-      });
+      res.writeHead(200, CORSHeader);
       res.write(html);
       res.end();
       break;
@@ -62,7 +68,7 @@ const requestHandler: http.RequestListener = async (
           .end();
         return;
       }
-      res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+      res.writeHead(200, CORSHeader);
       res.write((await initSession(opt)) || "Empty");
       res.end();
       break;
@@ -78,9 +84,7 @@ const requestHandler: http.RequestListener = async (
       }
       decode(encodeData)
         .then((parsed) => {
-          res.writeHead(200, {
-            "Content-type": "application/json; charset=utf-8",
-          });
+          res.writeHead(200, CORSHeader);
           res.end(JSON.stringify(parsed, null, 2));
         })
         .catch((err) => {
@@ -117,9 +121,7 @@ const requestHandler: http.RequestListener = async (
         }
         decode(encodeData)
           .then((parsed) => {
-            res.writeHead(200, {
-              "Content-type": "application/json; charset=utf-8",
-            });
+            res.writeHead(200, CORSHeader);
             res.end(JSON.stringify(parsed, null, 2));
           })
           .catch((err) => {
@@ -200,9 +202,7 @@ const requestHandler: http.RequestListener = async (
           "</body>",
           "</html>",
         ].join("\n");
-        res.writeHead(200, {
-          "Content-type": "text/html; charset=utf-8",
-        });
+        res.writeHead(200, CORSHeader);
         res.end(html);
       });
       break;
