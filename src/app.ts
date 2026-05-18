@@ -15,6 +15,16 @@ const requestHandler: http.RequestListener = async (
   res: http.ServerResponse
 ) => {
   const { method, url } = req;
+  // [임시] 신모듈 cutover 전 호출자 origin 인벤토리 — 검증 끝나면 제거
+  console.log(JSON.stringify({
+    t: new Date().toISOString(),
+    m: method,
+    u: url,
+    ua: req.headers["user-agent"],
+    ref: req.headers["referer"],
+    orig: req.headers["origin"],
+    xff: req.headers["x-forwarded-for"],
+  }));
   const _url = new URL(<string>url, process.env.NICE_SERVER_HOSTNAME);
 
   const CORSHeader = {
