@@ -28,7 +28,7 @@ const requestHandler: http.RequestListener = async (
   const _url = new URL(<string>url, process.env.NICE_SERVER_HOSTNAME);
 
   const CORSHeader = {
-  'Access-Control-Allow-Origin': 'https://buy-car.chabot.co.kr',
+  'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Accept',
   'Access-Control-Max-Age': 0,
